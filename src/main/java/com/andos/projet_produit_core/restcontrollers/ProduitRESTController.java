@@ -19,7 +19,7 @@ public class ProduitRESTController {
   @Autowired
   ProduitService produitService;
 
-  @RequestMapping(method = RequestMethod.GET)
+  @RequestMapping(path = "all", method = RequestMethod.GET)
   public List<Produit> getAllProduits() {
     return produitService.getAllProduits();
   }
