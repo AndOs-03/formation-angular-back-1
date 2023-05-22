@@ -26,6 +26,7 @@ public class SecurityConfig {
     http.csrf().disable()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+
         .cors().configurationSource(request -> {
           var config = new CorsConfiguration();
           config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
@@ -36,11 +37,15 @@ public class SecurityConfig {
           config.setMaxAge(3600L);
           return config;
         }).and()
+
         .authorizeHttpRequests()
+        .anyRequest().permitAll();
+
+        /*
         .requestMatchers("/api/all/**").hasAnyAuthority("ADMIN", "USER")
         .requestMatchers(HttpMethod.GET, "/api/getbyid/**").hasAnyAuthority("ADMIN")
         .anyRequest().authenticated().and()
-        .addFilterBefore(new JWTAuthorizationFilter(), BasicAuthenticationFilter.class);
+        .addFilterBefore(new JWTAuthorizationFilter(), BasicAuthenticationFilter.class);*/
     return http.build();
   }
 }

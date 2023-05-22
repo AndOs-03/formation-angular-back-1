@@ -2,9 +2,11 @@ package com.andos.projet_produit_core.services;
 
 import com.andos.projet_produit_core.entites.Categorie;
 import com.andos.projet_produit_core.entites.Produit;
+import com.andos.projet_produit_core.repos.ImageRepository;
 import com.andos.projet_produit_core.repos.ProduitRepository;
 import java.util.List;
 
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ public class ProduitServiceImpl implements ProduitService {
 
 	@Autowired
 	ProduitRepository produitRepository;
+  @Autowired
+	ImageRepository imageRepository;
 	
 	@Override
 	public Produit saveProduit(Produit p) {
@@ -22,8 +26,13 @@ public class ProduitServiceImpl implements ProduitService {
 
 	@Override
 	public Produit updateProduit(Produit p) {
-		return produitRepository.save(p);
-		
+		Long oldProdImageId = this.getProduit(p.getIdProduit()).getImage().getIdImage();
+		Long newProdImageId = p.getImage().getIdImage();
+		Produit prodUpdated = produitRepository.save(p);
+		if (!Objects.equals(oldProdImageId, newProdImageId)) {
+			imageRepository.deleteById(oldProdImageId);
+		}
+		return prodUpdated;
 	}
 
 	@Override
